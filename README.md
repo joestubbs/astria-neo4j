@@ -93,6 +93,11 @@ ASTRIA Data Experiments
 Importing the Data
 -------------------
 
+The high-level strategy that seems to work is this:
+1. Start with a v3 dump file
+2. Start a v4.0 noe4j instance to use to import the data (this is multiple steps, see below).
+3. Once the data has been imported to a 4.0 instance, run a 4.4 instance "on top of" the data directory. This seems to work. 
+
 Work directory: `~/tmp/ASTRIA` and assumes a directory, `~/tmp/ASTRIA/data` and `~/tmp/ASTRIA/import`. The `~/tmp/data` contains the Neo4j database while `~/tmp/import` contains a dump file, `graph.db.dump`.
 
 First, need to start container to create the initial database shell
@@ -113,7 +118,7 @@ Next, import the data from the dump file:
 neo4j-admin load --database=neo4j --from=/import/graph.db.dump --force
 ```
 
-Finally, exit the shell to stop that container and start up Neo4j as normal:
+Finally, exit the shell to stop that container and start up Neo4j as normal. Here, we specify `neo4j:4.0`.
 
 ```
 docker run \
@@ -128,5 +133,7 @@ docker run \
   -e NEO4J_apoc_import_file_use__neo4j__config=true \
   -e NEO4JLABS_PLUGINS=\[\"apoc\"\] \
   -e dbms_security_procedures_unrestricted=algo.*,apoc.* \
-  neo4j:4.4
+  neo4j:4.0
 ```
+
+Once the server has started and imported the data correctly, one can run the same command above, replacing `neo4j:4.0` with `neo4j:4.4`.
