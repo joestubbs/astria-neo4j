@@ -137,3 +137,34 @@ docker run \
 ```
 
 Once the server has started and imported the data correctly, one can run the same command above, replacing `neo4j:4.0` with `neo4j:4.4`.
+
+
+Starting the Server Again and Basic Queries
+--------------------------------------------
+
+Once the above procedure has been done on a host, the Neo4j database 
+container can be restarted from the same directory. The `start_astria_db.sh` 
+script contains a complete `docker run` command that can be used. 
+
+
+Executing Basic Queries
+-----------------------
+The simplest way to test the database is to exec into the neo4j container:
+
+```
+docker exec -it neo4j4.4 bash
+```
+
+and then use `cypher-shell` to run queries against the local databases.
+Be sure to pass the same auth credentials established in the earlier steps; 
+e.g., 
+
+```
+cypher-shell -u neo4j -p tapis4ever "MATCH (n) RETURN count(n) as nodes"
++-----------+
+| nodes     |
++-----------+
+| 103049370 |
++-----------+
+```
+
