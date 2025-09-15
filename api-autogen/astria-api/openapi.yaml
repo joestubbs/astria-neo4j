@@ -1,0 +1,263 @@
+openapi: 3.0.3
+info:
+  title: Neo4j Graph REST API
+  version: 1.0.0
+  description: >
+    Auto-generated REST API for the provided Neo4j graph schema.
+    Supports CRUD operations and filtering with query parameters
+    (e.g., ?released_gte=2007).
+servers:
+  - url: http://localhost:8000/api
+paths:
+  # Example for DataSource
+  /datasources:
+    get:
+      summary: List DataSources
+      parameters:
+        - $ref: '#/components/parameters/CommonFilters'
+      responses:
+        '200':
+          description: List of DataSources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataSource'
+    post:
+      summary: Create a DataSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+      responses:
+        '201':
+          description: DataSource created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+  /datasources/{id}:
+    get:
+      summary: Get DataSource by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: A DataSource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+    patch:
+      summary: Update DataSource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+      responses:
+        '200':
+          description: Updated DataSource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+    delete:
+      summary: Delete DataSource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Deleted successfully
+  /datasources/{id}/spaceobjectroots:
+    get:
+      summary: List SpaceObjectRoots in a DataSource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Related SpaceObjectRoots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SpaceObjectRoot'
+  # Repeat similar structure for all node types...
+components:
+  parameters:
+    CommonFilters:
+      name: filters
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: object
+        additionalProperties: true
+      description: >
+        Filtering parameters (e.g. field=value, field_gte=..., field_lte=..., field_like=...).
+
+  schemas:
+    DataSource:
+      type: object
+      properties:
+        LastCatalogUpdate: { type: string, format: date-time }
+        UniqueId: { type: integer }
+        PublicData: { type: boolean }
+        Name: { type: string }
+
+    Country:
+      type: object
+      properties:
+        Code: { type: string }
+        Name: { type: string }
+
+    OrbitType:
+      type: object
+      properties:
+        Code: { type: string }
+
+    SpaceObjectRoot:
+      type: object
+      properties:
+        CatalogId: { type: string }
+
+    SpaceObject:
+      type: object
+      properties:
+        BallCoeff: { type: number }
+        BirthDate: { type: string }
+        Country: { type: string }
+        Name: { type: string }
+        NoradId: { type: string }
+        AreaToMass: { type: number }
+        DragCoeff: { type: number }
+        ReflCoeff: { type: number }
+        CosparId: { type: string }
+
+    Orbit:
+      type: object
+      properties:
+        ArgP: { type: number }
+        Inc: { type: number }
+        RAAN: { type: number }
+        SMA: { type: number }
+        Ecc: { type: number }
+        Epoch: { type: string, format: date-time }
+        MeanAnom: { type: number }
+        OrbitType: { type: string }
+        Cart:
+          type: array
+          items: { type: number }
+
+    Measurement:
+      type: object
+      properties:
+        JSONString: { type: string }
+        MeasurementDate: { type: string, format: date }
+        SourceFileFormat: { type: string }
+        Station: { type: string }
+        EndMeasurementDatetime: { type: string, format: date-time }
+        StartMeasurementDatetime: { type: string, format: date-time }
+        CosparId: { type: string }
+        ObjectName: { type: string }
+        ObserverCode: { type: string }
+        PhotometricBand: { type: string }
+        AtmosphereTransChar: { type: number }
+        RMSError: { type: number }
+
+    Database:
+      type: object
+      properties:
+        name: { type: string }
+
+    Message:
+      type: object
+      properties:
+        name: { type: string }
+
+    Sentinel1A:
+      type: object
+      properties:
+        JSONData: { type: string }
+
+    LatestSpaceObject:
+      type: object
+      properties:
+        ReflCoeff: { type: number }
+        NoradId: { type: string }
+        DragCoeff: { type: number }
+        BallCoeff: { type: number }
+        Name: { type: string }
+        Country: { type: string }
+        BirthDate: { type: string }
+        CosparId: { type: string }
+        LaunchSite: { type: string }
+        LaunchVehicle: { type: string }
+        DetailedPurpose: { type: string }
+        Contractor: { type: string }
+        Purpose: { type: string }
+        Lifetime: { type: string }
+        Users: { type: string }
+        DryMass: { type: string }
+        Power: { type: string }
+        Operator: { type: string }
+        LaunchMass: { type: string }
+        AreaToMass: { type: number }
+
+    Sentinel1A_blr2486:
+      type: object
+      properties:
+        JSONData: { type: string }
+
+    Sentinel1A_Nick:
+      type: object
+      properties:
+        JSONData: { type: string }
+
+    CloseApproach:
+      type: object
+      properties:
+        timeOfCA: { type: string }
+        timeOfCalc: { type: string }
+        minDist: { type: number }
+        Longitude1: { type: number }
+        Longitude2: { type: number }
+        relVel: { type: number }
+        orbitalRegime: { type: string }
+
+    LatestCloseApproach:
+      type: object
+      properties:
+        timeOfCA: { type: string }
+        timeOfCalc: { type: string }
+        relVel: { type: number }
+        Longitude1: { type: number }
+        orbitalRegime: { type: string }
+        minDist: { type: number }
+        Longitude2: { type: number }
+
+    Sensor:
+      type: object
+      properties:
+        Longitude: { type: number }
+        Altitude: { type: number }
+        Id: { type: string }
+        Latitude: { type: number }

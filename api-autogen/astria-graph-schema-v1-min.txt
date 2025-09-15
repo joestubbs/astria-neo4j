@@ -1,0 +1,32 @@
+ASTRIA Schema: Node properties:
+DataSource {LastCatalogUpdate: DATE_TIME, UniqueId: INTEGER, PublicData: BOOLEAN, Name: STRING}
+Country {Code: STRING, Name: STRING}
+OrbitType {Code: STRING}
+SpaceObjectRoot {CatalogId: STRING}
+SpaceObject {BallCoeff: FLOAT, BirthDate: STRING, Country: STRING, Name: STRING, NoradId: STRING, AreaToMass: FLOAT, DragCoeff: FLOAT, ReflCoeff: FLOAT, CosparId: STRING}
+Orbit {ArgP: FLOAT, Inc: FLOAT, RAAN: FLOAT, SMA: FLOAT, Ecc: FLOAT, Epoch: DATE_TIME, MeanAnom: FLOAT, OrbitType: STRING, Cart: LIST}
+Measurement {JSONString: STRING, MeasurementDate: DATE, SourceFileFormat: STRING, Station: STRING, EndMeasurementDatetime: DATE_TIME, StartMeasurementDatetime: DATE_TIME, CosparId: STRING, ObjectName: STRING, ObserverCode: STRING, PhotometricBand: STRING, AtmosphereTransChar: FLOAT, RMSError: FLOAT}
+Database {name: STRING}
+Message {name: STRING}
+Sentinel1A {JSONData: STRING}
+LatestSpaceObject {ReflCoeff: FLOAT, NoradId: STRING, DragCoeff: FLOAT, BallCoeff: FLOAT, Name: STRING, Country: STRING, BirthDate: STRING, CosparId: STRING, LaunchSite: STRING, LaunchVehicle: STRING, DetailedPurpose: STRING, Contractor: STRING, Purpose: STRING, Lifetime: STRING, Users: STRING, DryMass: STRING, Power: STRING, Operator: STRING, LaunchMass: STRING, AreaToMass: FLOAT}
+Sentinel1A_blr2486 {JSONData: STRING}
+Sentinel1A_Nick {JSONData: STRING}
+CloseApproach {timeOfCA: STRING, timeOfCalc: STRING, minDist: FLOAT, Longitude1: FLOAT, Longitude2: FLOAT, relVel: FLOAT, orbitalRegime: STRING}
+LatestCloseApproach {timeOfCA: STRING, timeOfCalc: STRING, relVel: FLOAT, Longitude1: FLOAT, orbitalRegime: STRING, minDist: FLOAT, Longitude2: FLOAT}
+Sensor {Longitude: FLOAT, Altitude: FLOAT, Id: STRING, Latitude: FLOAT}
+
+Relationship properties:
+
+The relationships:
+(:DataSource)-[:has_catalog]->(:SpaceObjectRoot)
+(:DataSource)-[:has_sensor]->(:Sensor)
+(:SpaceObjectRoot)-[:has_update]->(:SpaceObject)
+(:SpaceObjectRoot)-[:has_update]->(:LatestSpaceObject)
+(:SpaceObjectRoot)-[:has_lon]->(:LatestGeoLongitude)
+(:SpaceObjectRoot)-[:hasCloseApproachAsPrimary]->(:CloseApproach)
+(:SpaceObjectRoot)-[:hasCloseApproachAsSecondary]->(:CloseApproach)
+(:SpaceObjectRoot)-[:has_measurement]->(:Measurement)
+(:SpaceObject)-[:has_orbit]->(:Orbit)
+(:Database)-[:SAYS]->(:Message)
+(:LatestSpaceObject)-[:has_orbit]->(:Orbit)
